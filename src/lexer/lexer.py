@@ -13,47 +13,36 @@ class SkyLexer:
         t.value = int(t.value)  # преобразуем строку в число
         return t
 
-    def t_STRING(t):
+    def t_STRING(self, t):
         r'[^"]*'
         t.value = t.value[1:-1]
         return t
 
-    def t_IN(t):
-        r'in'
-        t.type = 'IN'
-        return t
-
-    def t_INN(t):
-        r'inn'
-        t.type = 'INN'
-        return t
-
-    def t_WRITE(t):
-        r'wr'
-        t.type = 'WRITE'
-        return t
-
-    def t_WRITEN(t):
-        r'wrn'
-        t.type = 'WRITEN'
-        return t
-
-    def t_GREQ(t):
+    def t_GREQ(self, t):
         r'>='
         t.type = 'GREQ'
         return t
 
-    def t_LSEQ(t):
+    def t_LSEQ(self, t):
         r'<='
         t.type = 'LSEQ'
         return t
 
-    def t_EQEQ(t):
+    def t_EQEQ(self, t):
         r'=='
         t.type = 'EQEQ'
         return t
 
-    def t_IF(t):
-        r'if'
-        t.type = 'IF'
+    def t_ID(self, t):
+        r'[a-zA-Z_][a-zA-Z0-9_]*'
+        t.type = keywords.get(t.value, 'ID')
         return t
+
+    def t_error(self, t):
+        print(f"Неизвестный символ '{t.value[0]}' на позиции {t.lexpos}")
+        t.lexer.skip(1)
+
+    def tokenize(self, text):
+        self.lexer.input(text)
+        return list(self.lexer)
+
