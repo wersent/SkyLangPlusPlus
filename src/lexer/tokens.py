@@ -1,4 +1,4 @@
-tokens = {
+tokens = (
     # Арифметические
     "NUMBER",
     "PLUS",      # +
@@ -34,9 +34,10 @@ tokens = {
     "BLOCKS",  # {
     "BLOCKE",  # }
 
-    "VAR"  # Переменная
-    "STRING"
-}
+    "VAR",  # Переменная
+    "STRING",
+    "ID"
+)
 
 keywords = {
     'v': 'VAR',
@@ -47,17 +48,3 @@ keywords = {
     'wr': 'WRITE',
     'wrn': 'WRITEN',
 }
-
-t_PLUS = r'\+'
-t_MINUS = r'-'
-t_DIV = r'/'
-t_MULT = r'\*'
-t_EQ = r'='
-t_AND = r'&'
-t_OR = r'\|'
-t_NOT = r'!'
-t_BRO = r'\('
-t_BRC = r'\)'
-t_BLOCKS = r'\{'
-t_BLOCKE = r'\}'
-t_ignore = ' \t'

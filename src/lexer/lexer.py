@@ -1,20 +1,39 @@
 from ply import lex
-from tokens import tokens, keywords
+from .tokens import tokens, keywords
 
 
 class SkyLexer:
     def __init__(self):
+        self.tokens = tokens
         self.lexer = lex.lex(module=self)
 
-    # Токены:
+    # Простые токены
 
-    def t_NUMBER(t):
+    t_PLUS = r'\+'
+    t_MINUS = r'-'
+    t_DIV = r'/'
+    t_MULTIPLY = r'\*'
+    t_EQ = r'='
+    t_GR = r'>'
+    t_LS = r'<'
+    t_AND = r'&'
+    t_OR = r'\|'
+    t_NOT = r'!'
+    t_BRO = r'\('
+    t_BRC = r'\)'
+    t_BLOCKS = r'\{'
+    t_BLOCKE = r'\}'
+    t_ignore = ' \t'
+
+    # Сложные токены:
+
+    def t_NUMBER(self, t):
         r'\d+'  # регулярное выражение для чисел
         t.value = int(t.value)  # преобразуем строку в число
         return t
 
     def t_STRING(self, t):
-        r'[^"]*'
+        r'"[^"]*"'
         t.value = t.value[1:-1]
         return t
 
