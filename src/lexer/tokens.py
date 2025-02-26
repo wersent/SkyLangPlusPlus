@@ -4,7 +4,7 @@ tokens = (
     "PLUS",      # +
     "MINUS",     # -
     "DIV",       # /
-    "MULTIPLY",  # *
+    "MULT",  # *
     "EQ",        # =
 
     # I/O система
@@ -33,6 +33,7 @@ tokens = (
     "BRC",  # )
     "BLOCKS",  # {
     "BLOCKE",  # }
+    "SEMICOLON", # ;
 
     "VAR",  # Переменная
     "STRING",

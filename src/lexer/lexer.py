@@ -5,6 +5,7 @@ from .tokens import tokens, keywords
 class SkyLexer:
     def __init__(self):
         self.tokens = tokens
+        self.keywords = keywords
         self.lexer = lex.lex(module=self)
 
     # Простые токены
@@ -12,7 +13,7 @@ class SkyLexer:
     t_PLUS = r'\+'
     t_MINUS = r'-'
     t_DIV = r'/'
-    t_MULTIPLY = r'\*'
+    t_MULT = r'\*'
     t_EQ = r'='
     t_GR = r'>'
     t_LS = r'<'
@@ -23,7 +24,8 @@ class SkyLexer:
     t_BRC = r'\)'
     t_BLOCKS = r'\{'
     t_BLOCKE = r'\}'
-    t_ignore = ' \t'
+    t_SEMICOLON = r';'
+    t_ignore = ' \t\n'
 
     # Сложные токены:
 
@@ -34,7 +36,7 @@ class SkyLexer:
 
     def t_STRING(self, t):
         r'"[^"]*"'
-        t.value = t.value[1:-1]
+        #t.value = t.value[1:-1]
         return t
 
     def t_GREQ(self, t):
@@ -54,7 +56,7 @@ class SkyLexer:
 
     def t_ID(self, t):
         r'[a-zA-Z_][a-zA-Z0-9_]*'
-        t.type = keywords.get(t.value, 'ID')
+        t.type = self.keywords.get(t.value, 'ID')
         return t
 
     def t_error(self, t):
