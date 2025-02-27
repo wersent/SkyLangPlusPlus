@@ -2,6 +2,15 @@ from ply import yacc
 from src.lexer.lexer import SkyLexer
 
 class SkyParser:
+    """
+       Основной класс парсера для построения абстрактного синтаксического дерева (AST).
+
+       :attr lexer: Экземпляр лексера SkyLexer
+       :attr tokens: Список токенов (наследуется от лексера)
+       :attr parser: Экземпляр PLY-парсера
+       :attr precedence: Таблица приоритетов и ассоциативности операторов
+       """
+
     def __init__(self):
         self.lexer = SkyLexer()
         self.tokens = self.lexer.tokens

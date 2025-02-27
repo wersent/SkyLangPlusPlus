@@ -3,6 +3,15 @@ from .tokens import tokens, keywords
 
 
 class SkyLexer:
+    """
+        Основной класс лексера для обработки исходного кода SkyLang.
+
+        :attr tokens: Список имен токенов (наследуется из модуля tokens)
+        :attr keywords: Словарь ключевых слов языка (наследуется из модуля tokens)
+        :attr lexer: Экземпляр PLY-лексера
+        :attr _ignore: Символы, которые следует игнорировать (пробел, таб, новая строка)
+        """
+
     def __init__(self):
         self.tokens = tokens
         self.keywords = keywords
@@ -64,6 +73,14 @@ class SkyLexer:
         t.lexer.skip(1)
 
     def tokenize(self, text):
+        """
+                Основной метод для токенизации входного текста.
+
+                :param text: Исходный код для обработки
+                :type text: str
+                :return: Список токенов
+                :rtype: list[LexToken]
+                """
         self.lexer.input(text)
         return list(self.lexer)
 
