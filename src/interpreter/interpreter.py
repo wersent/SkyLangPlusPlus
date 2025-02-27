@@ -91,6 +91,11 @@ class SkyInterpreter:
             val1_ev = self.evaluate(val1)
             val2_ev = self.evaluate(val2)
 
+            if isinstance(val1_ev, float):
+                val1_ev = int(val1_ev)
+            if isinstance(val2_ev, float):
+                val1_ev = int(val2_ev)
+
             match (op):
                 case '+':
                     if isinstance(val1_ev, int) and isinstance(val2_ev, int): # int int
