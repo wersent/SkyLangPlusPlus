@@ -77,6 +77,8 @@ class SkyParser:
             p[0] = p[1]
         elif p[1] == '(':
             p[0] = p[2]
+        elif p[1] == '!':  # Унарный NOT
+            p[0] = ('!', p[3])
         else:
             p[0] = (p[2], p[1], p[3])
 

@@ -95,6 +95,18 @@ class SkyInterpreter:
                     else:
                         raise RuntimeError(f"Невозможно сравнить {type(val1_ev)} и {type(val2_ev)}")
 
+                case '&':
+                    if isinstance(val1_ev, int) and isinstance(val2_ev, int):  # int int
+                        return val1_ev and val2_ev
+                    else:
+                        raise RuntimeError(f"Невозможно сравнить {type(val1_ev)} и {type(val2_ev)}")
+
+                case '|':
+                    if isinstance(val1_ev, int) and isinstance(val2_ev, int):  # int int
+                        return val1_ev or val2_ev
+                    else:
+                        raise RuntimeError(f"Невозможно сравнить {type(val1_ev)} и {type(val2_ev)}")
+
 
         elif isinstance(expr, int): # число
             return int(expr)
