@@ -19,6 +19,8 @@ class SkyInterpreter:
                 Создает пустое окружение для хранения переменных.
                 """
         self.environment = {}  # Словарь для хранения переменных: {'x': 10, 'y': 20}
+        self.classes = {}  # Классы
+        self.objects = {}  # Объекты (экземпляры)
 
     def interpret(self, ast):
         """
@@ -51,10 +53,18 @@ class SkyInterpreter:
             self.visit_while(node)
         elif node[0] == 'io':
             self.visit_io(node)
+        elif node[0] == 'class':
+            self.visit_class(node)
+        elif node[0] == 'new':
+            self.visit_new(node)
+        elif node[0] == 'get_member':
+            return self.visit_get_member(node)
+        elif node[0] == 'call_method':
+            return self.visit_call_method(node)
         else:
             raise RuntimeError(f"Неизвестный узел AST: {node[0]}")
 
-    def isString(self ,val):
+    def isString(self, val):
         """
                 Проверяет, является ли значение строковым литералом.
 
@@ -291,3 +301,115 @@ class SkyInterpreter:
                         self.environment[var] = tmp
                     else:
                         raise RuntimeError(f"Переменная {var} не объявлена")
+
+    def visit_class(self, node):
+        """
+        Сохраняет определение класса в словаре self.classes.
+        :param node: ('class', 'Person', [body])
+        """
+        _, class_name, body = node
+
+        # Извлекаем поля и методы
+        fields = []
+        methods = {}
+
+        for member in body:
+            _, access, decl_node = member
+
+            if decl_node[0] == 'declare':
+                var_name = decl_node[1]
+                fields.append(var_name)
+
+            elif decl_node[0] == 'function':
+                func_name = decl_node[2]
+                methods[func_name] = decl_node
+
+        self.classes[class_name] = {
+            'fields': fields,
+            'methods': methods
+        }
+
+    def visit_new(self, node):
+        """
+        Создаёт экземпляр класса.
+        Пример: ('new', 'Person')
+        :param node: ('new', 'Person')
+        """
+        _, class_name = node
+        if class_name not in self.classes:
+            raise RuntimeError(f"Класс {class_name} не найден")
+
+        # Создаём "объект" как словарь
+        obj = {
+            'class': class_name,
+            'fields': {}
+        }
+
+        return obj
+
+    def visit_get_member(self, node):
+        """
+        Получает значение поля объекта.
+        Пример: ('get_member', 'p', 'name')
+        """
+        _, obj_expr, field_name = node
+
+        obj = self.evaluate(obj_expr)
+        if not isinstance(obj, dict) or 'class' not in obj:
+            raise RuntimeError(f"{obj_expr} не является объектом")
+
+        class_name = obj['class']
+        class_def = self.classes.get(class_name)
+
+        # Проверяем, есть ли такое поле в полях класса
+        if field_name not in class_def['fields']:
+            raise RuntimeError(f"Поле {field_name} отсутствует в классе {class_name}")
+
+        return obj['fields'].get(field_name)
+
+    def visit_call_method(self, node):
+        """
+        Вызывает метод объекта.
+        Пример: ('call_method', 'p', 'SetName', ['Alice'])
+        """
+        _, obj_expr, method_name, args = node
+
+        obj = self.evaluate(obj_expr)
+        if not isinstance(obj, dict) or 'class' not in obj:
+            raise RuntimeError(f"{obj_expr} не является объектом")
+
+        class_name = obj['class']
+        class_def = self.classes.get(class_name)
+
+        if method_name not in class_def['methods']:
+            raise RuntimeError(f"Метод {method_name} не определён в классе {class_name}")
+
+        method_node = class_def['methods'][method_name]
+
+        # Здесь можно передавать аргументы внутрь функции
+        # Например, формируем новое окружение внутри метода
+        _, return_type, method_name, parameters, body = method_node
+
+        # Сохраняем текущее состояние
+        old_env = self.environment.copy()
+
+        # Предположим, что параметры — это список ('args', 'n'), например
+        # Нужно привести их к виду {'param': value}
+        # Но здесь нужно больше деталей из твоего парсера
+
+        # Для примера просто объявляем 'this' и передаём аргументы
+        this = obj
+
+        # Сохраняем this и параметры
+        self.environment['this'] = this
+        for i, param in enumerate(parameters):
+            self.environment[param] = self.evaluate(args[i])
+
+        # Выполняем тело метода
+        for stmt in body:
+            self.execute(stmt)
+
+        # Восстанавливаем старое окружение
+        self.environment.clear()
+        self.environment.update(old_env)
+

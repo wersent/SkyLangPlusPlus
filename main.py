@@ -8,13 +8,17 @@ parser = SkyParser()
 interpreter = SkyInterpreter()
 
 code = '''
-v x;
-inn(x);
-v y = 15;
-if ((x > y) | ((x / 2) == 6)){
-    wrn(x);
-    wr(y);
+c Person{
+    p v name;
+    pr int age;
+
+    p void SetName(string nam){
+        name = nam;
+    }
 }
+
+Person per = n Person();
+per.SetName("penis");
 '''
 
 ast = parser.parse(code)

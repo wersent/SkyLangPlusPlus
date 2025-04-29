@@ -35,6 +35,12 @@ class SkyLexer:
     t_BLOCKE = r'\}'
     t_SEMICOLON = r';'
     t_ignore = ' \t\n'
+    t_CLASS = r'c'
+    t_PUBLIC = r'p'
+    t_PRIVATE = r'pr'
+    t_NEW = r'n'
+    t_DOT = r'\.'
+    t_COMMA = r','
 
     # Сложные токены:
 
@@ -66,6 +72,10 @@ class SkyLexer:
     def t_ID(self, t):
         r'[a-zA-Z_][a-zA-Z0-9_]*'
         t.type = self.keywords.get(t.value, 'ID')
+        return t
+
+    def t_TYPE(self, t):
+        r'int|string|bool|void'
         return t
 
     def t_error(self, t):

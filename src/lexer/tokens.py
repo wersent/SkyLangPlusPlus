@@ -33,11 +33,19 @@ tokens = (
     "BRC",  # )
     "BLOCKS",  # {
     "BLOCKE",  # }
-    "SEMICOLON", # ;
+    "SEMICOLON",  # ;
 
     "VAR",  # Переменная
     "STRING",
-    "ID"
+    "ID",
+
+    "CLASS",
+    "PUBLIC",
+    "PRIVATE",
+    "NEW",
+    "DOT",
+    "COMMA",
+    "TYPE",
 )
 
 keywords = {
@@ -48,4 +56,8 @@ keywords = {
     'inn': 'INN',
     'wr': 'WRITE',
     'wrn': 'WRITEN',
+    'c': 'CLASS',
+    'p': 'PUBLIC',
+    'pr': 'PRIVATE',
+    'n': 'NEW',
 }
